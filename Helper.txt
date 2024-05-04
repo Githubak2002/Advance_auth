@@ -1,0 +1,54 @@
+Client and Server folder
+  cd client - Setup Vite js and tailwind css
+  cd server -
+    npm init -y
+    npm install express mongoose nodemon bcrypt jsonwebtoken cors dotenv cookie-parser 
+    devDependencies - nodemon dotenv morgan?
+
+
+Add a script in package.json - “start” : “nodemon index.js”
+Add/Change - “type” : “module”		// import express from “express”
+
+
+Setting .env - PORT = 8080 and mongoDB url, etc…
+
+
+======================== JWT methods ========================
+1. jwt.verify: When you jwt.verify a token, you are checking if the token is valid and has not been tampered with. It ensures the token's signature is correct, and if the token has an expiration time, audience, or issuer, it verifies those too. If everything checks out, it means the token is authentic and can be trusted for authentication purposes.
+
+2. jwt.decode: Decoding a token with jwt.decode simply means extracting the information (claims) stored in the token without verifying its signature. It's like reading the contents of the token without confirming if it's trustworthy. This method is suitable for trusted messages but should not be used for untrusted sources.
+
+3. jwt.sign: When you jwt.sign a token, you are creating a new token by adding a signature to it. This signature ensures the token's integrity and authenticity. It's like putting a stamp on a letter to prove it's from you. The signed token can then be used for secure communication and authentication.
+
+
+
+
+// ===== login an existing user =========  without JWT
+/** 
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        msg: "User NOT found/registered!",
+      });
+    }
+    const validPass = await bcrypt.compare(password, user.password);
+    if (!validPass) {
+      return res.status(404).json({
+        status: false,
+        msg: "Incorrect Email/password",
+      });
+    }
+    // await newUser.save();
+    return res.status(200).json({
+      status: true,
+      msg: "User Logged in",
+    });
+  } catch (err) {
+    console.log(`Error in login user - ${err}`);
+  }
+});
+*/
