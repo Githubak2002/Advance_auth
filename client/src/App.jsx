@@ -8,6 +8,8 @@ import ForgotPass from "./pages/ForgotPass";
 import "./index.css";
 import ResetPass from "./pages/ResetPass";
 import { Toaster } from "react-hot-toast";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -18,6 +20,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+
           <Route path="/forgotPass" element={<ForgotPass/ >} />
           <Route path="/resetPass/:token" element={<ResetPass />} />
         </Routes>

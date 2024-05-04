@@ -1,15 +1,17 @@
 import express from "express";
-import { SignUpController,LoginController } from "../Controllers/AuthController.js";
-
+import { SignUpController,LoginController,LogoutController } from "../Controllers/AuthController.js";
 
 const router = express.Router();
 
 // ===== register a new user =========
 router.post("/signup", SignUpController);
+
+// ===== login an existing user with JWT token ========= 
 router.post("/login", LoginController);
 
-// ===== login an existing user ========= JWT
-// router.post("/login", LoginController);
+// ====== LogOut user =========
+router.get("/logout", LogoutController);
+
 
 // ====== Forgot Password =========
 // router.post("/forgotPass", ForgotPassController);
@@ -18,10 +20,5 @@ router.post("/login", LoginController);
 // router.post("/resetPass/:token", ResetPassController);
 
 
-// router.get("/logout",LogoutController);
-
-// router.get("/logout", async (req, res) => {
-  
-// });
 
 export { router as AuthRoute };

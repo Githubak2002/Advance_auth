@@ -1,47 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
-// import toast from 'react-hot-toast';
 
-// Aimation on scroll - Zoom in animation
-// import 'aos/dist/aos.css';
-// import AOS from 'aos';
-// AOS.init();
+import { useSelector, useDispatch } from 'react-redux';
+import { signInSuccess,signInFailed,signInStart } from "../redux/user/userSlice";
 
 const baseURl = import.meta.env.VITE_BACKEND_BASE_URL;
 const inputCSS = "border-2 border-black p-2 sm:w-[300px]";
 
 const Login = () => {
 
-
-
-
-
-  // const [user,setUser] = useState('');
-  // useEffect(()=>{
-    
-  //   const cookies = document.cookie.split(';');
-  //   console.log(cookies);
-  //   let loginToken = '';
-  //   for (let i = 0; i < cookies.length; i++) {
-  //     const cookie = cookies[i].trim();
-  //     if (cookie.startsWith('LoginToken=')) {
-  //       loginToken = cookie.substring('LoginToken='.length, cookie.length);
-  //       break;
-  //     }
-  //   }
-  //   console.log(cookies);
-
-  // },[loginUser]);
-
-
-
-
-
-
-
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   axios.defaults.withCredentials = true;
   // allows Axios to include cookies or authentication tokens when making cross-origin requests, enabling access to protected resources across different domains.
@@ -60,24 +32,27 @@ const Login = () => {
     // console.log(`User entered data `, input);
     try {
       // axios return a res not data therefore destructuring the data obj
+      dispatch(signInStart());
       const { data } = await axios.post(
         `http://localhost:8080/api/v1/auth/login`,
         { email: input.email.toLowerCase(), password: input.password }
       );
       // console.log(data);
-      if(data.success) {
-        console.log("User Logged in");
-        toast.success('User Logged in successfully');
-        navigate("/");
-      } else {
+      if(!data.success) {
         console.log("User NOT logged in!");
         console.log(data.msg);
+      } else {
+        console.log("User Logged in");
+        dispatch(signInSuccess(data));
+        toast.success('User Logged in successfully');
+        navigate("/");
       }
     } 
     catch (error) {
       console.log("error - ",error);
       // console.log("error - ",error);
       if (error.response && error.response.data) {
+        dispatch(signInFailed(error.response.data.msg));
         toast.error(error.response.data.msg);
         console.log(`Error in loginUser fun → ${error.response.data.msg}`, error);
       } else {
@@ -89,7 +64,7 @@ const Login = () => {
   return (
     <main
       // data-aos="zoom-in"
-      className="h-[90vh] flexCenter mx-auto container"
+      className="h-[90vh] flexCenter mx-auto container flex-col"
     >
       <form
         className=" shadow-2xl border-2 border-black mt-6 px-4 py-6 flex-col flex items-center gap-y-3 justify-center"
@@ -136,6 +111,11 @@ const Login = () => {
           Forgot Password?
         </Link>
       </form>
+
+      {
+        error ? <h2 className="text-red-500 mt-3">{error || "Someting went Wrong"}</h2> : <></>
+      }
+
     </main>
   );
 };

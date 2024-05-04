@@ -52,7 +52,7 @@ export const SignUpController = async (req,res,next) => {
 
 }
 
-/** ======= Login/SignIn an existing user with JWT token ======= */
+/** ======= Login/SignIn an existing user JWT ======= */
 export const LoginController = async (req,res,next) => {
   try {
     const { email, password } = req.body;
@@ -84,6 +84,31 @@ export const LoginController = async (req,res,next) => {
     });
   }
 }
+
+/** ======= LogOut user ======= */
+export const LogoutController = async (req, res,next) => {
+  try {
+    res.clearCookie("accessToken");
+    return res.status(202).json({
+      success: true,
+      msg: "Logged Out successfully!",
+    });
+  } catch (err) {
+    console.log("Error from Logout route → ", err);
+    return next(errorHandler(400,false,"LogOut ERROR"));
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
 
 
 // ===== testing a protected rout 
