@@ -21,6 +21,10 @@ Setting .env - PORT = 8080 and mongoDB url, etc…
 3. jwt.sign: When you jwt.sign a token, you are creating a new token by adding a signature to it. This signature ensures the token's integrity and authenticity. It's like putting a stamp on a letter to prove it's from you. The signed token can then be used for secure communication and authentication.
 
 
+====================== cookieParser ======================
+app.use(cookieParser());
+
+Ease of Access: Without cookie-parser, you would need to manually parse the Cookie header in each route handler to extract cookie data. cookie-parser simplifies this process by handling the parsing automatically and placing the parsed cookies in req.cookies.
 
 
 // ===== login an existing user =========  without JWT
