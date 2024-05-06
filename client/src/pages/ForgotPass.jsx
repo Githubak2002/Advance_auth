@@ -22,7 +22,7 @@ const ForgotPass = () => {
     console.log(`User entered data `, userEmail);
     try {
       const { data } = await axios.post(
-        `http://localhost:8080/api/v1/users/forgotPass`,
+        `http://localhost:8080/api/v1/user/forgotPass`,
         { email: userEmail}
       );
       if (data) {

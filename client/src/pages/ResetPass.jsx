@@ -22,7 +22,7 @@ const ResetPass = () => {
     // console.log(`New pass `, pass);
     try {
       const { data } = await axios.post(
-        `http://localhost:8080/api/v1/users/resetPass/`+token,
+        `http://localhost:8080/api/v1/user/resetPass/`+token,
         { newPass: pass}
       );
       console.log("Data from pass Reset route - ",data);

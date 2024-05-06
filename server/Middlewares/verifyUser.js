@@ -1,29 +1,27 @@
 import jwt from "jsonwebtoken"
 
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
+// const verifyToken = (req, res, next) => {
+//   const token = req.headers.authorization;
 
-  if (!token) {
-    return res.status(401).json({ message: 'Unauthorized - Token not provided' });
-  }
+//   if (!token) {
+//     return res.status(401).json({ message: 'Unauthorized - Token not provided' });
+//   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: 'Unauthorized - Invalid token' });
-    }
-    req.user = decoded;
-    next();
-  });
-};
+//   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+//     if (err) {
+//       return res.status(401).json({ message: 'Unauthorized - Invalid token' });
+//     }
+//     req.user = decoded;
+//     next();
+//   });
+// };
 
-export default verifyToken
-
-
+// export default verifyToken
 
 
 export const verifyingToken = (req, res, next) => {
   // const token = req.headers.authorization;
-  const token = req.cookies.LoginToken;
+  const token = req.cookies.accessToken;
 
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized - Token not provided' });

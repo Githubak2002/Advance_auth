@@ -22,8 +22,8 @@ const ForgotPassController = async (req,res) => {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "appylohar@gmail.com",
-        pass: "aqml kqzt bsmu jnnh",
+        user: process.env.EMAILID,
+        pass: process.env.EMAILPASS,
       },
     });
 

@@ -37,7 +37,7 @@ app.get('*',(req,res) => {
 */
 
 
-app.use('/api/v1/users',UserRoute);
+app.use('/api/v1/user',UserRoute);
 app.use('/api/v1/auth',AuthRoute);
 app.use('/api/v1/auth/do',verifyingToken,doNothing);
 
