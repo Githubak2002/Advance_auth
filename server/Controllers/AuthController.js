@@ -66,11 +66,12 @@ export const LoginController = async (req,res,next) => {
     const token = jwt.sign(
       { userName: user.userName },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "2d" }
+      // { expiresIn: "1m" }
     );
     // httpOnly:true - prevent the token from being accessed by client-side scripts
-    // res.cookie("token", token, { httpOnly: true, maxAge: 360000 });
-    res.cookie("accessToken", token, {  maxAge: 360000 });
+    // res.cookie("accessToken", token, {  maxAge: 60000 });   // 1 min
+    res.cookie("accessToken", token, { httpOnly: true, maxAge: 172800000 });  // 2days
     return res.json({
       success: true,
       msg: "Login successfully",
@@ -84,6 +85,8 @@ export const LoginController = async (req,res,next) => {
     });
   }
 }
+
+// (expiresIn) should be shorter than or equal to the expiration time set for the cookie (maxAge)
 
 /** ======= LogOut user ======= */
 export const LogoutController = async (req, res,next) => {
@@ -99,6 +102,29 @@ export const LogoutController = async (req, res,next) => {
   }
 };
 
+
+export const TokenExistsController = async (req,res,next) => {
+  const token = req.cookies.accessToken || req.headers.authorization;
+
+  console.log("Token - ", token);
+
+  if (!token) {
+    return next(errorHandler(401,false,'Unauthorized - Session expired. Please log in again to continue.'))
+    // return res.status(401).json({ message: 'Unauthorized - Session expired. Please log in again to continue.' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return next(errorHandler(401,false,'Unauthorized - Invalid token'));
+      // return res.status(401).json({ message: 'Unauthorized - Invalid token'});
+    }
+    // req.user = decoded;
+    return res.status(200).json({ 
+      success:true,
+      message: 'Token exits.' 
+    })    
+  });
+}
 
 
 

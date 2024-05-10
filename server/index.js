@@ -2,13 +2,13 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import morgan from "morgan";
-import cors from "cors"
+import cors from "cors";
 import cookieParser from "cookie-parser";
-import colors from 'colors';
+import colors from "colors";
 
 import { UserRoute } from "./routes/user.js";
 import { AuthRoute } from "./routes/auth.js";
-import { verifyingToken } from "./Middlewares/verifyUser.js";
+import { verifyingToken } from "./Middlewares/verifyToken.js";
 import { doNothing } from "./Controllers/AuthController.js";
 
 // import path from 'path';
@@ -20,13 +20,14 @@ const app = express();
 
 /* === middlewares === */
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(cookieParser());
-app.use(cors({
-  origin:["http://localhost:5174","http://localhost:5173"],
-  credentials:true
-}));
-
+app.use(
+  cors({
+    origin: ["http://localhost:5174", "http://localhost:5173"],
+    credentials: true,
+  })
+);
 
 /* === static folder === */
 /** 
@@ -36,10 +37,9 @@ app.get('*',(req,res) => {
 })
 */
 
-
-app.use('/api/v1/user',UserRoute);
-app.use('/api/v1/auth',AuthRoute);
-app.use('/api/v1/auth/do',verifyingToken,doNothing);
+app.use("/api/v1/user", UserRoute);
+app.use("/api/v1/auth", AuthRoute);
+app.use("/api/v1/auth/do", verifyingToken, doNothing);
 
 const port = process.env.PORT || 3000;
 const baseURL = process.env.BASE_URL;
@@ -57,28 +57,25 @@ const startServer = async () => {
 };
 
 // ========= HOME route =========
-app.get(('/'), (req,res) => {
+app.get("/", (req, res) => {
   res.send("Backend Server");
-})
+});
 
 startServer();
 
-
 // ==== Middleware Handling Error ===
-app.use((err,req,res,next) => {
+app.use((err, req, res, next) => {
   // console.log("printing the error",err)
   const statusCode = err.statusCode || 500;
-  const msg = err.message || 'Internal server ERROR';
+  const msg = err.message || "Internal server ERROR";
 
   return res.status(statusCode).json({
-    success:false,
+    success: false,
     msg,
     statusCode,
     // errror :err
-  })
-})
-
-
+  });
+});
 
 /**   mongoose.connect(process.env.MONGODB_URL)
   .then( () => {

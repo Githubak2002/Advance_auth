@@ -3,6 +3,8 @@ import errorHandler from "../utils/customError.js";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import randomstring from "randomstring";
+import { User as userModel } from "../models/userModel.js";
+import mongoose from "mongoose";
 
 // ===== Update user =====
 export const UpdateController = async (req, res, next) => {
@@ -39,8 +41,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "appylohar@gmail.com",
-    pass: "aqml kqzt bsmu jnnh"
-    ,
+    pass: "aqml kqzt bsmu jnnh",
     // user: process.env.EMAILID,
     // pass: process.env.EMAILPASS,
   },
@@ -54,11 +55,26 @@ function generateOTP() {
   });
 }
 
-// Endpoint to send email with OTP to user on login
-export const VerifyUserEmailController = async (req, res, next) => {
+// Endpoint to send email with OTP to user on login - NOT USING
+// EMAIL Send with OTP but HOW TO VERIFY and where to save the OTP
+export const OTPVerifyUserEmailController = async (req, res, next) => {
   try {
     const { email } = req.body;
     const otp = generateOTP();
+    const expirationTime = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
+
+    try {
+      const user = await userModel.findOne({ email });
+      if (user) {
+        // Update the existing document with the new OTP and expiration time
+        await userModel.updateOne(
+          { email: email },
+          { $set: { otp: otp, expiresAt: expirationTime } }
+        );
+      }
+    } catch (err) {
+      next(err);
+    }
 
     const mailOptions = {
       from: process.env.EMAILID,
@@ -71,14 +87,14 @@ export const VerifyUserEmailController = async (req, res, next) => {
       if (error) {
         console.log(error);
         res.status(500).json({
-          success:false,
-          msg:"Error sending OTP"
+          success: false,
+          msg: "Error sending OTP",
         });
       } else {
         console.log("Email sent: " + info.response);
         res.status(200).json({
-          success:false,
-          msg:"OTP sent successfully"
+          success: false,
+          msg: "OTP sent successfully",
         });
       }
     });

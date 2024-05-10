@@ -1,5 +1,5 @@
 import express from "express";
-import { SignUpController,LoginController,LogoutController } from "../Controllers/AuthController.js";
+import { SignUpController,LoginController,LogoutController, TokenExistsController } from "../Controllers/AuthController.js";
 
 const router = express.Router();
 
@@ -11,6 +11,9 @@ router.post("/login", LoginController);
 
 // ====== LogOut user =========
 router.get("/logout", LogoutController);
+
+// ====== Token Present/exists? ======
+router.get("/token/exists",TokenExistsController);
 
 
 // ====== Forgot Password =========

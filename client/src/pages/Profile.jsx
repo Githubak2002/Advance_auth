@@ -13,22 +13,22 @@ const Profile = () => {
   const navigate = useNavigate();
   const { currentUser, error, loading } = useSelector((state) => state.user);
 
-  const verifyEmail = async () => {
-    try {
-      const otpMail = await axios.post(`${baseURl}/api/v1/user/verifiy`,{email:currentUser.user.email});
-      if(otpMail){
-        console.log("otpMail ", otpMail);
-        toast.success(otpMail.data.msg);
-      }
-      else{
-        console.log("error", otpMail)
-        toast.err(otpMail.data.msg);
-      }
-    } catch (err) {
-      console.log("Error in verify Email function - ",err);
-      toast.error("Some Error!")
-    }
-  }
+  // const verifyEmail = async () => {
+  //   try {
+  //     const otpMail = await axios.post(`${baseURl}/api/v1/user/verifiy`,{email:currentUser.user.email});
+  //     if(otpMail){
+  //       console.log("otpMail ", otpMail);
+  //       toast.success(otpMail.data.msg);
+  //     }
+  //     else{
+  //       console.log("error", otpMail)
+  //       toast.err(otpMail.data.msg);
+  //     }
+  //   } catch (err) {
+  //     console.log("Error in verify Email function - ",err);
+  //     toast.error("Some Error!")
+  //   }
+  // }
 
   return (
     <section className="mx-auto max-w-[1400px] px-4 sm:px-8">
@@ -52,7 +52,7 @@ const Profile = () => {
             Home
           </Link>
 
-          <button onClick={verifyEmail} className={buttonCSS}>Verify Now</button>
+          {/* <button onClick={verifyEmail} className={buttonCSS}>Verify Now</button> */}
         </div>
 
 
